@@ -26,9 +26,9 @@ const App = () => {
       console.log(res);
 
       const url = {
-        backdrop: res.images.secure_base_url + "orignal",
-        poster: res.images.secure_base_url + "orignal",
-        profile: res.images.secure_base_url + "orignal",
+        backdrop: res.images.secure_base_url + "original",
+        poster: res.images.secure_base_url + "original",
+        profile: res.images.secure_base_url + "original",
       };
 
       dispatch(getApiConfiguration(url));

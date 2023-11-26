@@ -20,7 +20,7 @@ const App = () => {
   useEffect(() => {
     fetchApiConfig();
     genresCall();
-  }, []);
+  });
 
   const fetchApiConfig = () => {
     fetchDatafromApi("/configuration").then((res) => {

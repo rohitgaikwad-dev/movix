@@ -33,7 +33,7 @@ const SearchResult = () => {
         if (data?.results) {
           setData({
             ...data,
-            results: [...data?.results, ...res.results],
+            results: [...data.results, ...res.results],
           });
         } else {
           setData(res);
@@ -59,6 +59,20 @@ const SearchResult = () => {
                   data.total_results > 1 ? "results" : "result"
                 } of '${query}'`}
               </div>
+              <InfiniteScroll
+                className="content"
+                dataLength={data?.results?.length || []}
+                next={fetchNextPageData}
+                hasMore={pageNum <= data?.total_pages}
+                loader={<Spinner />}
+              >
+                {data.results.map((item, index) => {
+                  if (item.media_type === "person") return;
+                  return (
+                    <MovieCard key={index} data={item} fromSearch={true} />
+                  );
+                })}
+              </InfiniteScroll>
             </>
           ) : (
             <span className="resultNotFound">Sorry, Resutls not found</span>

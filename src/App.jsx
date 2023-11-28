@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { fetchDatafromApi } from "./utils/api";
+import { fetchDataFromApi } from "./utils/api";
 import { useSelector, useDispatch } from "react-redux";
 import { getApiConfiguration, getGenres } from "./store/homeSlice";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -20,10 +20,10 @@ const App = () => {
   useEffect(() => {
     fetchApiConfig();
     genresCall();
-  });
+  }, []);
 
   const fetchApiConfig = () => {
-    fetchDatafromApi("/configuration").then((res) => {
+    fetchDataFromApi("/configuration").then((res) => {
       console.log(res);
 
       const url = {
@@ -42,7 +42,7 @@ const App = () => {
     let allGenres = {};
 
     endPoints.forEach((url) => {
-      promises.push(fetchDatafromApi(`/genre/${url}/list`));
+      promises.push(fetchDataFromApi(`/genre/${url}/list`));
     });
 
     const data = await Promise.all(promises);

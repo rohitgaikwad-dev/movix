@@ -27,21 +27,21 @@ const SearchResult = () => {
     );
   };
 
-  // const fetchNextPageData = () => {
-  //   fetchDataFromApi(`/search/multi?query=${query}&page=${pageNum}`).then(
-  //     (res) => {
-  //       if (data.results) {
-  //         setData({
-  //           ...data,
-  //           results: [...data?.results, ...res.results],
-  //         });
-  //       } else {
-  //         setData(res);
-  //       }
-  //       setPageNum((prev) => prev + 1);
-  //     }
-  //   );
-  // };
+  const fetchNextPageData = () => {
+    fetchDataFromApi(`/search/multi?query=${query}&page=${pageNum}`).then(
+      (res) => {
+        if (data?.results) {
+          setData({
+            ...data,
+            results: [...data?.results, ...res.results],
+          });
+        } else {
+          setData(res);
+        }
+        setPageNum((prev) => prev + 1);
+      }
+    );
+  };
 
   useEffect(() => {
     fetachInitialData();
@@ -49,8 +49,9 @@ const SearchResult = () => {
 
   return (
     <div className="searchResultsPage">
+      SearchResult
       {loading && <Spinner initial={true} />}
-      {!loading && (
+      {/*{!loading && (
         <ContentWrapper>
           {data.results.length > 0 ? (
             <>
@@ -78,7 +79,7 @@ const SearchResult = () => {
             <span className="resultNotFound">Sorry, Results not found!</span>
           )}
         </ContentWrapper>
-      )}
+      )} */}
     </div>
   );
 };

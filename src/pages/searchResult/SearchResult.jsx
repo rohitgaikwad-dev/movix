@@ -16,7 +16,7 @@ const SearchResult = () => {
   const [loading, setLoading] = useState(false);
   const { query } = useParams();
 
-  const fetachInitialData = () => {
+  const fetchInitialData = () => {
     setLoading(true);
     fetchDataFromApi(`/search/multi?query=${query}&page=${pageNum}`).then(
       (res) => {
@@ -30,10 +30,10 @@ const SearchResult = () => {
   const fetchNextPageData = () => {
     fetchDataFromApi(`/search/multi?query=${query}&page=${pageNum}`).then(
       (res) => {
-        if (data?.results) {
+        if (data && data.results) {
           setData({
             ...data,
-            results: [...data?.results, ...res.results],
+            results: [...data.results, ...res.results],
           });
         } else {
           setData(res);
@@ -44,20 +44,21 @@ const SearchResult = () => {
   };
 
   useEffect(() => {
-    fetachInitialData();
+    setPageNum(1);
+    fetchInitialData();
   }, [query]);
 
   return (
     <div className="searchResultsPage">
       SearchResult
       {loading && <Spinner initial={true} />}
-      {/*{!loading && (
+      {!loading && (
         <ContentWrapper>
-          {data.results.length > 0 ? (
+          {data?.results?.length > 0 ? (
             <>
               <div className="pageTitle">
                 {`Search ${
-                  data.total_results > 1 ? "results" : "result"
+                  data?.total_results > 1 ? "results" : "result"
                 } of '${query}'`}
               </div>
               <InfiniteScroll
@@ -67,8 +68,8 @@ const SearchResult = () => {
                 hasMore={pageNum <= data?.total_pages}
                 loader={<Spinner />}
               >
-                {data.results.map((item, index) => {
-                  if (item.media_type === "person") return;
+                {data?.results.map((item, index) => {
+                  if (item.media_type === "person") return null;
                   return (
                     <MovieCard key={index} data={item} fromSearch={true} />
                   );
@@ -79,7 +80,7 @@ const SearchResult = () => {
             <span className="resultNotFound">Sorry, Results not found!</span>
           )}
         </ContentWrapper>
-      )} */}
+      )}
     </div>
   );
 };

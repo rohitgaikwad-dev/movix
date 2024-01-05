@@ -1,24 +1,34 @@
 import { useEffect, useState } from "react";
 import { fetchDataFromApi } from "../utils/api";
+
 const useFetch = (url) => {
     const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        setLoading("loading...");
-        setData(null);
-        setError(null);
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                setData(null);
+                setError(null);
 
-        fetchDataFromApi(url)
-            .then((res) => {
+                const response = await fetchDataFromApi(url);
+                setData(response);
+            } catch (error) {
+                if (error.response) {
+                    setError(`Request failed with status: ${error.response.status}`);
+                } else if (error.request) {
+                    setError("Network error. Please try again.");
+                } else {
+                    setError("Something went wrong!");
+                }
+            } finally {
                 setLoading(false);
-                setData(res);
-            })
-            .catch((err) => {
-                setLoading(false);
-                setError("Something went wrong!" + err);
-            });
+            }
+        };
+
+        fetchData();
     }, [url]);
 
     return { data, loading, error };

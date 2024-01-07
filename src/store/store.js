@@ -1,8 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
-import homeSlice from "./homeSlice"
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import homeSlice from "./homeSlice";
+
+const rootReducer = combineReducers({
+  home: homeSlice,
+});
 
 export const store = configureStore({
-  reducer: {
-    home: homeSlice,
-  },
+  reducer: rootReducer,
 });

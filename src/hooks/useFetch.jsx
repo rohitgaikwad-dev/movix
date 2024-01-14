@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
-import { fetchDataFromApi } from "../utils/api";
-
-const useFetch = (url) => {
-    const [data, setData] = useState(null);
+const useFetch = (url, initialData = null) => {
+    const [data, setData] = useState(initialData);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -10,28 +7,29 @@ const useFetch = (url) => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                setData(null);
-                setError(null);
+                setData(initialData); // Reset data to initial state before fetching
 
                 const response = await fetchDataFromApi(url);
                 setData(response);
             } catch (error) {
-                if (error.response) {
-                    setError(`Request failed with status: ${error.response.status}`);
-                } else if (error.request) {
-                    setError("Network error. Please try again.");
-                } else {
-                    setError("Something went wrong!");
-                }
+                handleError(error);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, [url]);
+    }, [url, initialData]);
 
-    return { data, loading, error };
+    const handleError = (error) => {
+        if (error.response) {
+            setError(`Request failed with status: ${error.response.status}`);
+        } else if (error.request) {
+            setError("Network error. Please try again.");
+        } else {
+            setError("Something went wrong!");
+        }
+    };
+
+    return { data, loading, error, refetch: fetchData }; // Expose refetch function
 };
-
-export default useFetch;
